@@ -1,6 +1,11 @@
 package Tiny;
 
 import ast.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Generador {
 	/* Ilustracion de la disposicion de la memoria en
@@ -34,8 +39,6 @@ public class Generador {
 	 */
 	private static int desplazamientoTmp = 0;
 	private static TablaSimbolos tablaSimbolos = null;
-        private static String outputFile="salida.tm";
-	
 	public static void setTablaSimbolos(TablaSimbolos tabla){
 		tablaSimbolos = tabla;
 	}

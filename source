@@ -1,3 +1,4 @@
+mainbegin
 { Sample program
   in TINY language -
   computes factorial
@@ -5,4 +6,5 @@
 read x; { input an integer }
 read y;
 z:=x+y;
-write z
+write z;
+end

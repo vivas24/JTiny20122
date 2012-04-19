@@ -68,6 +68,7 @@ terminal OVER;
 terminal LPAREN;
 terminal RPAREN;
 terminal SEMI;
+terminal MAINB;
 
 /* Simbolos No Terminales */
 non terminal program;
@@ -90,9 +91,9 @@ precedence left TIMES;
 
 
 /* REGLAS GRAMATICALES */
-program     ::= stmt_seq:s	{: if(debug) System.out.println("\t regla 1"); 
-					ast = s;
-					:}
+program     ::= MAINB stmt_seq:s END 		{: if(debug) System.out.println("\t regla 1"); 
+						ast = s;
+						:}
 		;
 
 stmt_seq    ::= stmt_seq:ini SEMI stmt:sent	{: if(debug) System.out.println("\t regla 2a"); 
@@ -215,7 +216,7 @@ factor      ::= LPAREN exp:ex RPAREN	{: if(debug) System.out.println("\t regla 1
 		| NUM:valor	{: if(debug) System.out.println("\t regla 12b"); 
 					System.out.println("Devolvi nodo numero entero");
 					if(valor!=null){
-						RESULT= new NodoValor(valor.toString());					
+						RESULT= new NodoValor(Integer.parseInt(valor.toString()));					
 					}else{
 						RESULT = null;
 						System.out.println("Ocurrio error en cup # 0005");
