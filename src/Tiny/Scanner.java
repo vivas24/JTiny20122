@@ -696,7 +696,7 @@ BORRAR SI NO SE NECESITA
 			return sf.newSymbol("REPEAT",sym.REPEAT);
           }
         case 43: break;
-        case 15: 
+        case 15:
           { if(debug) System.out.println("token IF");
 			return sf.newSymbol("IF",sym.IF);
           }
