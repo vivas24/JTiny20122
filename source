@@ -1,10 +1,10 @@
 mainbegin
-{ Sample program
-  in TINY language -
-  computes factorial
-}
-read x; { input an integer }
-read y;
-z:=x+y;
+read x; 
+if x < 10 then 
+	y:= x +1;
+	x := x - 1;
+	z:= y+x;
+end;
 write z;
 end
+

@@ -20,6 +20,7 @@ Mas informacion en: http//4thmouse.com/index.php/2007/02/15/using-custom-symbols
 			parser_obj=new parser(new Scanner(new java.io.FileInputStream(args[0]),sf),sf);
 
 		parser_obj.parse();
+
 		NodoBase root=parser_obj.action_obj.getASTroot();
 		System.out.println();
 		System.out.println("IMPRESION DEL AST GENERADO");
@@ -30,6 +31,7 @@ Mas informacion en: http//4thmouse.com/index.php/2007/02/15/using-custom-symbols
 		ts.ImprimirClaves();
 		Tiny.Generador.setTablaSimbolos(ts);
 		Tiny.Generador.generarCodigoObjeto(root);
+
 	}
 
 :}
@@ -68,7 +70,13 @@ terminal OVER;
 terminal LPAREN;
 terminal RPAREN;
 terminal SEMI;
-terminal MAINB;
+/*+++++++++++++++++++++++*/
+terminal LE; 		//MENOR O IGUAL QUE
+terminal GE; 		//MAYOR O IGUAL QUE
+terminal GT; 		//MAYOR QUE
+terminal NE; 		//NO IGUAL QUE (DIFERENTE)
+terminal MAINB;		//TOKEN MAINBEGIN
+/*+++++++++++++++++++++++*/
 
 /* Simbolos No Terminales */
 non terminal program;
@@ -91,12 +99,12 @@ precedence left TIMES;
 
 
 /* REGLAS GRAMATICALES */
-program     ::= MAINB stmt_seq:s END 		{: if(debug) System.out.println("\t regla 1"); 
-						ast = s;
-						:}
+program     ::= MAINB stmt_seq:s END{: if(debug) System.out.println("\t regla 1"); 
+					ast = s;
+					:}
 		;
 
-stmt_seq    ::= stmt_seq:ini SEMI stmt:sent	{: if(debug) System.out.println("\t regla 2a"); 
+stmt_seq    ::= stmt_seq:ini  stmt:sent SEMI 	{: if(debug) System.out.println("\t regla 2a"); 
 						NodoBase hijoActual = ini;
 						if(hijoActual !=null){
 							while(hijoActual.TieneHermano()){
@@ -108,7 +116,7 @@ stmt_seq    ::= stmt_seq:ini SEMI stmt:sent	{: if(debug) System.out.println("\t 
 							RESULT=sent;
 						}
 						:}
-            | stmt:sent	{: if(debug) System.out.println("\t regla 2b"); 
+            | stmt:sent	SEMI {: if(debug) System.out.println("\t regla 2b"); 
 				RESULT=sent;				
 				:}
 		;
@@ -183,7 +191,19 @@ exp         ::= simple_exp:exI LT simple_exp:exD	{: if(debug) System.out.println
 		| simple_exp:exI EQ simple_exp:exD	{: if(debug) System.out.println("\t regla 9b"); 
 							RESULT = new NodoOperacion(exI,tipoOp.igual,exD);
 							:}
-		| simple_exp:ex	{: if(debug) System.out.println("\t regla 9c"); 
+		| simple_exp:exI GT simple_exp:exD	{: if(debug) System.out.println("\t regla 9c"); 
+							RESULT = new NodoOperacion(exI,tipoOp.mayor,exD);
+							:}
+		| simple_exp:exI LE simple_exp:exD	{: if(debug) System.out.println("\t regla 9d"); 
+							RESULT = new NodoOperacion(exI,tipoOp.menorIgual,exD);
+							:}
+		| simple_exp:exI GE simple_exp:exD	{: if(debug) System.out.println("\t regla 9e"); 
+							RESULT = new NodoOperacion(exI,tipoOp.mayorIgual,exD);
+							:}
+		| simple_exp:exI NE simple_exp:exD	{: if(debug) System.out.println("\t regla 9f"); 
+							RESULT = new NodoOperacion(exI,tipoOp.diferente,exD);
+							:}
+		| simple_exp:ex	{: if(debug) System.out.println("\t regla 9g"); 
 					RESULT = ex;
 					:}
 		;
@@ -234,6 +254,5 @@ factor      ::= LPAREN exp:ex RPAREN	{: if(debug) System.out.println("\t regla 1
 		| error	{: if(debug) System.out.println("\t regla 12d"); 
 				System.out.println("Ocurrio error en cup # 0003");
 				RESULT=null;
-				
 				:}
 		;
