@@ -104,7 +104,6 @@ public class Generador {
         /*Genero la parte THEN*/
         generar(n.getParteThen());
         localidadSaltoEnd = UtGen.emitirSalto(1);
-        System.out.println("SALTO END: "+localidadSaltoEnd);
         UtGen.emitirComentario("If: el salto hacia el final debe estar aqui");
         localidadActual = UtGen.emitirSalto(0);
         UtGen.cargarRespaldo(localidadSaltoElse);

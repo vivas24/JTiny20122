@@ -26,12 +26,13 @@ Mas informacion en: http//4thmouse.com/index.php/2007/02/15/using-custom-symbols
 		System.out.println("IMPRESION DEL AST GENERADO");
 		System.out.println();
 		ast.Util.imprimirAST(root);
+/*
 		TablaSimbolos ts = new TablaSimbolos();
 		ts.cargarTabla(root);
 		ts.ImprimirClaves();
 		Tiny.Generador.setTablaSimbolos(ts);
 		Tiny.Generador.generarCodigoObjeto(root);
-
+*/
 	}
 
 :}
@@ -76,6 +77,8 @@ terminal GE; 		//MAYOR O IGUAL QUE
 terminal GT; 		//MAYOR QUE
 terminal NE; 		//NO IGUAL QUE (DIFERENTE)
 terminal MAINB;		//TOKEN MAINBEGIN
+terminal AND;		//"Y" LOGICO
+terminal OR;		//"O" LOGICO	
 /*+++++++++++++++++++++++*/
 
 /* Simbolos No Terminales */
@@ -91,15 +94,20 @@ non terminal NodoBase exp;
 non terminal NodoBase simple_exp;
 non terminal NodoBase term;
 non terminal NodoBase factor;
+/*+++++++++++++++++++++++*/
+/*+++++++++++++++++++++++*/
 
 /* Precedencia de operadores */
 precedence left PLUS;
 precedence left MINUS;
 precedence left TIMES;
-
+/*+++++++++++++++++++++++*/
+precedence left OR;
+precedence left AND;
+/*+++++++++++++++++++++++*/
 
 /* REGLAS GRAMATICALES */
-program     ::= MAINB stmt_seq:s END{: if(debug) System.out.println("\t regla 1"); 
+program     ::= MAINB stmt_seq:s END{: if(debug) System.out.println("\t regla 1a"); 
 					ast = s;
 					:}
 		;
@@ -150,7 +158,7 @@ if_stmt     ::= IF exp:ex THEN stmt_seq:pthen END	{: if(debug) System.out.printl
 		:}
 		;
 
-repeat_stmt ::= REPEAT stmt_seq:cuerpo UNTIL exp:prueba	{: if(debug) System.out.println("\t regla 5"); 
+repeat_stmt ::= REPEAT stmt_seq:cuerpo UNTIL exp:prueba	{: if(debug) System.out.println("\t regla 5a"); 
 							RESULT = new NodoRepeat(cuerpo,prueba);
 							:}
 		;
@@ -169,7 +177,7 @@ assign_stmt ::= ID:variable 	{: if(debug) System.out.println("\t regla 6 parte d
 					:}
 		;
 
-read_stmt   ::= READ ID:variable	{: if(debug) System.out.println("\t regla 7"); 
+read_stmt   ::= READ ID:variable	{: if(debug) System.out.println("\t regla 7a"); 
 					System.out.println("Leyendo Variable");
 					if(variable!=null)
 					RESULT = new NodoLeer(variable.toString());
@@ -180,12 +188,17 @@ read_stmt   ::= READ ID:variable	{: if(debug) System.out.println("\t regla 7");
 					:}
 		;
 
-write_stmt  ::= WRITE exp:ex	{: if(debug) System.out.println("\t regla 8"); 
+write_stmt  ::= WRITE exp:ex	{: if(debug) System.out.println("\t regla 8a"); 
 					RESULT= new NodoEscribir(ex);
 					:}
 		;
-
-exp         ::= simple_exp:exI LT simple_exp:exD	{: if(debug) System.out.println("\t regla 9a"); 
+exp         ::= exp:exI AND exp:exD 	{: if(debug) System.out.println("\t regla 8.5a"); 
+						RESULT = new NodoOperacion(exI,tipoOp.ylogico,exD);
+					:}
+		| exp:exI OR exp:exD 	{: if(debug) System.out.println("\t regla 8.5b"); 
+						RESULT = new NodoOperacion(exI,tipoOp.ologico,exD);
+					:}
+		| simple_exp:exI LT simple_exp:exD	{: if(debug) System.out.println("\t regla 9a"); 
 								RESULT = new NodoOperacion(exI,tipoOp.menor,exD);
 								:} 
 		| simple_exp:exI EQ simple_exp:exD	{: if(debug) System.out.println("\t regla 9b"); 
@@ -203,7 +216,7 @@ exp         ::= simple_exp:exI LT simple_exp:exD	{: if(debug) System.out.println
 		| simple_exp:exI NE simple_exp:exD	{: if(debug) System.out.println("\t regla 9f"); 
 							RESULT = new NodoOperacion(exI,tipoOp.diferente,exD);
 							:}
-		| simple_exp:ex	{: if(debug) System.out.println("\t regla 9g"); 
+		| simple_exp:ex	{: if(debug) System.out.println("\t regla 9i"); 
 					RESULT = ex;
 					:}
 		;

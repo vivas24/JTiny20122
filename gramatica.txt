@@ -1,0 +1,47 @@
+1 - 	program → 
+		a) stmt-sequence
+2 - 	stmt-sequence → 
+		a) stmt-sequence ; statement
+		b) statement
+3 - 	statement → 
+		a) if-stmt 
+		b) repeat-stmt 
+		c) assign-stmt 
+		d) read-stmt 
+		e) write-stmt
+		f) error
+4 - 	if-stmt → 
+		a) if exp then stmt-sequence end 
+		b) if exp then stmt-sequence else stmt-sequence end
+5 - 	repeat-stmt → 
+		a) repeat stmt-sequence until exp
+6 - 	assign-stmt → 
+		a) identifier := exp
+7 - 	read-stmt → 
+		a) read identifier
+8 - 	write-stmt → 
+		a) write exp
+9 - 	exp → 
+		a) simple-exp < simple-exp 
+		b) simple-exp = simple-exp 
+		c) simple-exp > simple-exp 
+		d) simple-exp <= simple-exp 
+		e) simple-exp >= simple-exp 
+		f) simple-exp != simple-exp 
+		g) simple-exp && simple-exp 
+		h) simple-exp || simple-exp 
+		i) simple-exp
+10 - 	simple-exp → 
+		a) simple-exp + term 
+		b) simple-exp - term 
+		c) term
+11 -	term → 
+		a) term * factor 
+		b) term / factor 
+		c) factor
+mulop → * | /
+12 - 	factor → 
+		a) ( exp ) 
+		b) number 
+		c) identifier
+

@@ -1,10 +1,12 @@
 mainbegin
-read x; 
-if x < 10 then 
-	y:= x +1;
-	x := x - 1;
-	z:= y+x;
-end;
-write z;
+	read x; { input an integer }
+	if x > 0 || x < 5 then { don't compute if x <= 0 }
+		fact := 1;
+		repeat
+			fact := fact * x;
+			x := x - 1;
+		until x = 0;
+		write fact;  { output factorial of x }
+	end;
+	write 1;
 end
-
