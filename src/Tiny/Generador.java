@@ -280,6 +280,23 @@ public class Generador {
                 UtGen.emitirRM("LDC", UtGen.AC, 0, UtGen.AC, "caso de falso (AC=0)");
                 UtGen.emitirRM("LDA", UtGen.PC, 1, UtGen.PC, "Salto incodicional a direccion: PC+1 (es falso evito colocarlo verdadero)");
                 UtGen.emitirRM("LDC", UtGen.AC, 1, UtGen.AC, "caso de verdadero (AC=1)");
+            case ylogico:
+                UtGen.emitirComentario("+++++++++++++++  Y LOGICO  +++++++++++++++");
+                UtGen.emitirRM("JEQ", UtGen.AC, 3, UtGen.PC, "voy tres instrucciones mas alla: operador derecho AND falso (AC==0)");
+                UtGen.emitirRM("JEQ", UtGen.AC1, 2, UtGen.PC, "voy dos instrucciones mas alla: operador izquierdo AND falso (AC==0)");
+                UtGen.emitirRM("LDC", UtGen.AC, 1, UtGen.AC, "caso de verdadero (AC=1)");
+                UtGen.emitirRM("LDA", UtGen.PC, 1, UtGen.PC, "Salto incodicional a direccion: PC+1 (es verdadero, evito colocarlo falso)");
+                UtGen.emitirRM("LDC", UtGen.AC, 0, UtGen.AC, "caso de false (AC=0)");
+                UtGen.emitirComentario("+++++++++++++  FIN Y LOGICO  +++++++++++++");
+                break;
+            case ologico:
+                UtGen.emitirComentario("+++++++++++++++  O LOGICO  +++++++++++++++");
+                UtGen.emitirRM("JNE", UtGen.AC, 1, UtGen.PC, "voy una instrucciones mas alla: operador derecho OR verdadero (AC!=0)");
+                UtGen.emitirRM("JEQ", UtGen.AC1, 2, UtGen.PC, "voy dos instrucciones mas alla: operador izquierdo OR falso (AC==0)");
+                UtGen.emitirRM("LDC", UtGen.AC, 1, UtGen.AC, "caso de verdadero (AC=1)");
+                UtGen.emitirRM("LDA", UtGen.PC, 1, UtGen.PC, "Salto incodicional a direccion: PC+1 (es verdadero, evito colocarlo falso)");
+                UtGen.emitirRM("LDC", UtGen.AC, 0, UtGen.AC, "caso de false (AC=0)");
+                UtGen.emitirComentario("+++++++++++++  FIN O LOGICO  +++++++++++++");
                 break;
             default:
                 UtGen.emitirComentario("BUG: tipo de operacion desconocida");
