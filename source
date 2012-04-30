@@ -1,12 +1,11 @@
 mainbegin
 	read x; { input an integer }
-	if x > 0 || x < 5 then { don't compute if x <= 0 }
-		fact := 1;
+	fact := 1;
+	if x > 0 then { ... }
 		repeat
 			fact := fact * x;
 			x := x - 1;
 		until x = 0;
-		write fact;  { output factorial of x }
 	end;
-	write 1;
+	write fact;
 end

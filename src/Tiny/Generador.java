@@ -116,6 +116,11 @@ public class Generador {
             UtGen.cargarRespaldo(localidadSaltoEnd);
             UtGen.emitirRM_Abs("LDA", UtGen.PC, localidadActual, "if: jmp hacia el final");
             UtGen.restaurarRespaldo();
+        }else{
+            /*ESTA SECCION DE CODIGO HA SIDO AGREGADA PARA CORREGIR UNA FALLA CON EL IF*/
+            UtGen.cargarRespaldo(localidadSaltoEnd);
+            UtGen.emitirRM_Abs("LDA", UtGen.PC, localidadActual, "if: end del if");
+            UtGen.restaurarRespaldo();
         }
         if (UtGen.debug) {
             UtGen.emitirComentario("<- if");

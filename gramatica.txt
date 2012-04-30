@@ -22,6 +22,8 @@
 8 - 	write-stmt → 
 		a) write exp
 9 - 	exp → 
+		8.5a) exp && exp 
+		8.5b) exp || exp
 		a) simple-exp < simple-exp 
 		b) simple-exp = simple-exp 
 		c) simple-exp > simple-exp 
