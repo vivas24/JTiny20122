@@ -26,17 +26,11 @@ Mas informacion en: http//4thmouse.com/index.php/2007/02/15/using-custom-symbols
 		System.out.println("IMPRESION DEL AST GENERADO");
 		System.out.println();
 		ast.Util.imprimirAST(root);
-/*
-		TablaSimbolos ts = new TablaSimbolos();
-		ts.cargarTabla(root);
-		ts.ImprimirClaves();
-*/
 		TablaSimbolos ts = parser_obj.action_obj.getTablaSimbolos();
-//		ts.cargarTabla(root);
 		ts.ImprimirClaves();
 
-		Tiny.Generador.setTablaSimbolos(ts);
-		Tiny.Generador.generarCodigoObjeto(root);
+//		Tiny.Generador.setTablaSimbolos(ts);
+//		Tiny.Generador.generarCodigoObjeto(root);
 
 	}
 
@@ -90,6 +84,8 @@ terminal OR;		//"O" LOGICO
 terminal INT;		//tipo de variable declarada	
 terminal LCOR;		//corchete izquierdo
 terminal RCOR;		//corchete derecho
+terminal COMA;		//simbolo coma ","
+terminal ENDVAR;	//fin de bloque declaracion
 /*+++++++++++++++++++++++*/
 
 /* Simbolos No Terminales */
@@ -106,8 +102,10 @@ non terminal NodoBase simple_exp;
 non terminal NodoBase term;
 non terminal NodoBase factor;
 /*+++++++++++++++++++++++*/
+//non terminal NodoBase decl_var;
+non terminal NodoBase prog_blq;
+non terminal NodoBase decl_seq;
 non terminal NodoBase decl_stmt;
-non terminal NodoBase decl_var;
 /*+++++++++++++++++++++++*/
 
 /* Precedencia de operadores */
@@ -120,11 +118,49 @@ precedence left AND;
 /*+++++++++++++++++++++++*/
 
 /* REGLAS GRAMATICALES */
-program     ::= MAINB stmt_seq:s END{: if(debug) System.out.println("\t regla 1a"); 
+program     ::= MAINB prog_blq:s END{: if(debug) System.out.println("\t regla 1a"); 
 					ast = s;
 					:}
 		;
+prog_blq ::= INT decl_seq:ds SEMI ENDVAR stmt_seq:stm {:
+			
+			NodoBase hijoActual = ds;
+			while(hijoActual.TieneHermano()){
+				hijoActual = hijoActual.getHermanoDerecha();
+			}
+			hijoActual.setHermanoDerecha(stm);
+			RESULT=ds;
+		:};
+decl_seq ::= decl_seq:ini COMA decl_stmt:sent {:
+						NodoBase hijoActual = ini;
+						if(hijoActual !=null){
+							while(hijoActual.TieneHermano()){
+								hijoActual = hijoActual.getHermanoDerecha();
+							}
+							hijoActual.setHermanoDerecha(sent);
+							RESULT=ini;
+						}else{
+							RESULT=sent;
+						}
+		:}
+		| decl_stmt:sent {:
+				RESULT=sent;				
+		:};
 
+decl_stmt ::= ID:variable 
+			{:
+			if(debug) System.out.println("\t Creando nodo declaracion... para variable");
+				NodoDeclaracion nodo = new NodoDeclaracion(0,variable.toString());
+				ts.InsertarSimbolo(nodo,-1);
+				RESULT = nodo;
+	:}
+	| ID:variable LCOR NUM:valor RCOR {:
+			if(debug) System.out.println("\t Creando nodo declaracion... para vector");
+				NodoDeclaracion nodo = new NodoDeclaracion(Integer.parseInt(valor.toString()),variable.toString());
+				ts.InsertarSimbolo(nodo,-1);
+				RESULT = nodo;
+	:}
+;
 stmt_seq    ::= stmt_seq:ini  stmt:sent SEMI 	{: if(debug) System.out.println("\t regla 2a"); 
 						NodoBase hijoActual = ini;
 						if(hijoActual !=null){
@@ -157,37 +193,11 @@ stmt        ::= if_stmt:sif	{: if(debug) System.out.println("\t regla 3a");
             | write_stmt:sesc	{: if(debug) System.out.println("\t regla 3e"); 
 					RESULT=sesc;
 					:}
-	    | decl_stmt:decl 	{:if(debug) System.out.println("\t INSERTAR SIMBOLO:");
-					NodoDeclaracion nodo = (NodoDeclaracion)decl;
-					
-	  			ts.InsertarSimbolo(nodo,-1);
-				  System.out.println("\t DIRECCION: "+ts.getDireccion(((NodoDeclaracion)decl).getIdentificador()));
-					RESULT = nodo;					
-				:}
             | error	{: if(debug) System.out.println("\t regla 3g"); 
 				System.out.println("Ocurrio error en cup # 0004");
 				RESULT=null;
 				:}
             ;
-decl_stmt ::= INT decl_var:var {:if(debug) System.out.println("\t Creando nodo declaracion...");
-				RESULT = new NodoDeclaracion(0,((NodoIdentificador)var).getNombre());
-				
-		:}
-	     | INT decl_var:var LCOR NUM:valor RCOR{:
-			if(debug) System.out.println("\t Creando nodo declaracion... para vector");
-				RESULT = new NodoDeclaracion(Integer.parseInt(valor.toString()),((NodoIdentificador)var).getNombre());
-		:}
-		;  
-decl_var ::= ID:variable {: if(debug) System.out.println("\t leyendo variable para declaracion"); 
-					if(variable!=null){
-						System.out.println("Variable declarada: "+ variable.toString());
-						RESULT= new NodoIdentificador(variable.toString());		
-					}else{
-						RESULT = null;
-						System.out.println("Error en declaracion...");
-					}
-					:};
-
 if_stmt     ::= IF exp:ex THEN stmt_seq:pthen END	{: if(debug) System.out.println("\t regla 4a"); 
 		RESULT = new NodoIf(ex,pthen);
 		:}
@@ -307,3 +317,5 @@ factor      ::= LPAREN exp:ex RPAREN	{: if(debug) System.out.println("\t regla 1
 				RESULT=null;
 				:}
 		;
+
+

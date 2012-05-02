@@ -1,12 +1,7 @@
 mainbegin
-	int x;
-	int y;
-	int vector[10];
-	int z;
-	int w;
-	int variable;
-	read x;
-	if x > 0 then
+	int x,y,z,vec[12],m,var;
+endvar
+	if x > 20 then
 		x:=100;
 	end;
 	write x;

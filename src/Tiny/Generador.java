@@ -79,6 +79,8 @@ public class Generador {
                 generarIdentificador(nodo);
             } else if (nodo instanceof NodoOperacion) {
                 generarOperacion(nodo);
+            } else if (nodo instanceof NodoDeclaracion) {
+                System.out.println("********NODO DECLARACION => NO HACE NADA");
             } else {
                 System.out.println("BUG: Tipo de nodo a generar desconocido");
             }

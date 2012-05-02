@@ -55,6 +55,9 @@ espacio		= [ \t]+
 "mainbegin"     {	if(debug) System.out.println("token MAINB");
 			return sf.newSymbol("MAINB",sym.MAINB);
 			}
+"endvar"     {	if(debug) System.out.println("token ENDVAR");
+			return sf.newSymbol("ENDVAR",sym.ENDVAR);
+			}
 "if"            {	if(debug) System.out.println("token IF");
 			return sf.newSymbol("IF",sym.IF);
 			}
@@ -132,6 +135,9 @@ espacio		= [ \t]+
 			}
 ";"             {	if(debug) System.out.println("token SEMI");
 			return sf.newSymbol("SEMI",sym.SEMI);
+			}
+","             {	if(debug) System.out.println("token COMA");
+			return sf.newSymbol("COMA",sym.COMA);
 			}
 "int"             {	if(debug) System.out.println("token INT");
 			return sf.newSymbol("INT",sym.INT);

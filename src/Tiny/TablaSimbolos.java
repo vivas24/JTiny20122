@@ -58,7 +58,6 @@ public class TablaSimbolos {
 	
 	//true es nuevo no existe se insertara, false ya existe NO se vuelve a insertar 
 	public boolean InsertarSimbolo(String identificador, int numLinea){
-            System.out.println("INSERTANDO DESDE TS: "+identificador);
             RegistroSimbolo simbolo;
 		if(tabla.containsKey(identificador)){
 			return false;
@@ -68,7 +67,9 @@ public class TablaSimbolos {
 			return true;			
 		}
 	}
+        /*Insertar un Nodo Declaracion....*/
 	public boolean InsertarSimbolo(NodoDeclaracion nodo, int numLinea){
+            System.out.println("INSERTAR: "+nodo.getIdentificador());
             String identificador = nodo.getIdentificador();
             RegistroSimbolo simbolo;
 		if(tabla.containsKey(identificador)){
