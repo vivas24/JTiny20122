@@ -88,6 +88,8 @@ terminal MAINB;		//TOKEN MAINBEGIN
 terminal AND;		//"Y" LOGICO
 terminal OR;		//"O" LOGICO	
 terminal INT;		//tipo de variable declarada	
+terminal LCOR;		//corchete izquierdo
+terminal RCOR;		//corchete derecho
 /*+++++++++++++++++++++++*/
 
 /* Simbolos No Terminales */
@@ -167,6 +169,10 @@ stmt        ::= if_stmt:sif	{: if(debug) System.out.println("\t regla 3a");
 decl_stmt ::= INT decl_var:var {:if(debug) System.out.println("\t Creando nodo declaracion...");
 				RESULT = new NodoDeclaracion(0,((NodoIdentificador)var).getNombre());
 				
+		:}
+	     | INT decl_var:var LCOR NUM:valor RCOR{:
+			if(debug) System.out.println("\t Creando nodo declaracion... para vector");
+				RESULT = new NodoDeclaracion(Integer.parseInt(valor.toString()),((NodoIdentificador)var).getNombre());
 		:}
 		;  
 decl_var ::= ID:variable {: if(debug) System.out.println("\t leyendo variable para declaracion"); 

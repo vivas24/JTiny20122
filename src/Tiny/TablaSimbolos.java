@@ -76,7 +76,7 @@ public class TablaSimbolos {
 		}else{
 			simbolo= new RegistroSimbolo(identificador,numLinea,direccion);
                         if(nodo.esVector())
-                                direccion+=nodo.getTamanho();
+                                direccion+=nodo.getTamanho()-1;
                         else
                                 direccion++;
 			tabla.put(identificador,simbolo);

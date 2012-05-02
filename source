@@ -1,6 +1,7 @@
 mainbegin
 	int x;
 	int y;
+	int vector[10];
 	int z;
 	int w;
 	int variable;
