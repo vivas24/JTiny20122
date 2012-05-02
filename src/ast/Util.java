@@ -28,6 +28,8 @@ public class Util {
 		    		|| raiz instanceof NodoIdentificador 
                                 || raiz instanceof NodoDeclaracion)
 		    	imprimirNodo(raiz);
+                    else if(raiz instanceof NodoWhile)
+		    	System.out.println("While");
 		    else System.out.println("Tipo de nodo desconocido");;
 		    
 		    /* Hago el recorrido recursivo */
@@ -63,7 +65,16 @@ public class Util {
 		    	printSpaces();
 		    	System.out.println("**Expr Derecha Operacion**");		    	
 		    	imprimirAST(((NodoOperacion)raiz).getOpDerecho());
-		    }
+                    }else if(raiz instanceof NodoWhile){
+		    	printSpaces();
+		    	System.out.println("**Prueba WHILE**");
+		    	imprimirAST(((NodoWhile)raiz).getPrueba());
+		    	printSpaces();
+		    	System.out.println("**Cuerpo WHILE**");
+		    	imprimirAST(((NodoWhile)raiz).getCuerpo());
+		    	printSpaces();
+		    	System.out.println("**FIN WHILE**");
+                    }
 		    raiz = raiz.getHermanoDerecha();
 		  }
 		  sangria-=2;
