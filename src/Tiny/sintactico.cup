@@ -158,8 +158,11 @@ stmt        ::= if_stmt:sif	{: if(debug) System.out.println("\t regla 3a");
 					RESULT=sesc;
 					:}
 	    | decl_stmt:decl 	{:if(debug) System.out.println("\t INSERTAR SIMBOLO:");
-				  ts.InsertarSimbolo((NodoDeclaracion)decl,-1);
+					NodoDeclaracion nodo = (NodoDeclaracion)decl;
+					
+	  			ts.InsertarSimbolo(nodo,-1);
 				  System.out.println("\t DIRECCION: "+ts.getDireccion(((NodoDeclaracion)decl).getIdentificador()));
+					RESULT = nodo;					
 				:}
             | error	{: if(debug) System.out.println("\t regla 3g"); 
 				System.out.println("Ocurrio error en cup # 0004");

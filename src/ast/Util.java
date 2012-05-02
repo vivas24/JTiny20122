@@ -25,7 +25,8 @@ public class Util {
 		    
 		    else if (raiz instanceof NodoOperacion
 		    		|| raiz instanceof NodoValor
-		    		|| raiz instanceof NodoIdentificador )
+		    		|| raiz instanceof NodoIdentificador 
+                                || raiz instanceof NodoDeclaracion)
 		    	imprimirNodo(raiz);
 		    else System.out.println("Tipo de nodo desconocido");;
 		    
@@ -122,6 +123,14 @@ static void imprimirNodo( NodoBase raiz )
 	if(	raiz instanceof NodoIdentificador ){
 		System.out.println("ID, nombre= "+ ((NodoIdentificador)raiz).getNombre());
 	}
+	if(	raiz instanceof NodoDeclaracion ){
+                NodoDeclaracion nodo = (NodoDeclaracion)raiz;
+                if(nodo.esVector())
+                    System.out.println("VECTOR: "+nodo.getIdentificador());
+                else
+                    System.out.println("VARIABLE: "+nodo.getIdentificador());
+	}
+        
 
 }
 
