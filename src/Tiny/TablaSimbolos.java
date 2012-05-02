@@ -10,6 +10,7 @@ import ast.NodoIdentificador;
 import ast.NodoIf;
 import ast.NodoOperacion;
 import ast.NodoRepeat;
+import ast.NodoLeer;
 
 public class TablaSimbolos {
 	private HashMap<String, RegistroSimbolo> tabla;
@@ -25,8 +26,10 @@ public class TablaSimbolos {
 		while (raiz != null) {
 	    if (raiz instanceof NodoIdentificador){
 	    	InsertarSimbolo(((NodoIdentificador)raiz).getNombre(),-1);
-	    	//TODO: Añadir el numero de linea y localidad de memoria correcta
-	    }
+	    	//TODO: Aï¿½adir el numero de linea y localidad de memoria correcta
+	    }else if (raiz instanceof NodoLeer){
+	    	InsertarSimbolo(((NodoLeer)raiz).getIdentificador(),-1);
+            }
 
 	    /* Hago el recorrido recursivo */
 	    if (raiz instanceof  NodoIf){

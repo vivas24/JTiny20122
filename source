@@ -1,9 +1,7 @@
 mainbegin
-	read x; { input an integer }
-	if x >= 10 && x <= 15 || x >=20 && x <=25  then { ... }
+	read x;
+	if x > 0 then
 		x:=100;
-	else
-		x:=1;
 	end;
 	write x;
 end
