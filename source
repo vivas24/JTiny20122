@@ -1,4 +1,9 @@
 mainbegin
+	int x;
+	int y;
+	int z;
+	int w;
+	int variable;
 	read x;
 	if x > 0 then
 		x:=100;

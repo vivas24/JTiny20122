@@ -168,6 +168,7 @@ public class Generador {
             UtGen.emitirComentario("-> leer");
         }
         UtGen.emitirRO("IN", UtGen.AC, 0, 0, "leer: lee un valor entero ");
+        System.out.println("GET DIRECCION DE: "+n.getIdentificador());
         direccion = tablaSimbolos.getDireccion(n.getIdentificador());
         UtGen.emitirRM("ST", UtGen.AC, direccion, UtGen.GP, "leer: almaceno el valor entero leido en el id " + n.getIdentificador());
         if (UtGen.debug) {

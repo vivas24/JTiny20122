@@ -5,6 +5,7 @@ import java.util.*;
 
 import ast.NodoAsignacion;
 import ast.NodoBase;
+import ast.NodoDeclaracion;
 import ast.NodoEscribir;
 import ast.NodoIdentificador;
 import ast.NodoIf;
@@ -57,7 +58,8 @@ public class TablaSimbolos {
 	
 	//true es nuevo no existe se insertara, false ya existe NO se vuelve a insertar 
 	public boolean InsertarSimbolo(String identificador, int numLinea){
-		RegistroSimbolo simbolo;
+            System.out.println("INSERTANDO DESDE TS: "+identificador);
+            RegistroSimbolo simbolo;
 		if(tabla.containsKey(identificador)){
 			return false;
 		}else{
@@ -66,7 +68,21 @@ public class TablaSimbolos {
 			return true;			
 		}
 	}
-	
+	public boolean InsertarSimbolo(NodoDeclaracion nodo, int numLinea){
+            String identificador = nodo.getIdentificador();
+            RegistroSimbolo simbolo;
+		if(tabla.containsKey(identificador)){
+			return false;
+		}else{
+			simbolo= new RegistroSimbolo(identificador,numLinea,direccion);
+                        if(nodo.esVector())
+                                direccion+=nodo.getTamanho();
+                        else
+                                direccion++;
+			tabla.put(identificador,simbolo);
+			return true;			
+		}
+	}
 	public RegistroSimbolo BuscarSimbolo(String identificador){
 		RegistroSimbolo simbolo=(RegistroSimbolo)tabla.get(identificador);
 		return simbolo;
@@ -81,7 +97,7 @@ public class TablaSimbolos {
 	}
 
 	public int getDireccion(String Clave){
-		return BuscarSimbolo(Clave).getDireccionMemoria();
+                return BuscarSimbolo(Clave).getDireccionMemoria();
 	}
 	
 	/*

@@ -127,6 +127,9 @@ espacio		= [ \t]+
 ";"             {	if(debug) System.out.println("token SEMI");
 			return sf.newSymbol("SEMI",sym.SEMI);
 			}
+"int"             {	if(debug) System.out.println("token INT");
+			return sf.newSymbol("INT",sym.INT);
+			}
 {numero}        {	if(debug) System.out.println("token NUM");
 			return sf.newSymbol("NUM",sym.NUM,new String(yytext()));
 			}
