@@ -86,6 +86,10 @@ terminal LCOR;		//corchete izquierdo
 terminal RCOR;		//corchete derecho
 terminal COMA;		//simbolo coma ","
 terminal ENDVAR;	//fin de bloque declaracion
+terminal WHILE;		//ciclo while
+terminal ENDW;		//fin del ciclo while
+terminal FOR;		//ciclo for
+terminal ENDF;		//fin del ciclo for
 /*+++++++++++++++++++++++*/
 
 /* Simbolos No Terminales */
@@ -106,6 +110,8 @@ non terminal NodoBase factor;
 non terminal NodoBase prog_blq;
 non terminal NodoBase decl_seq;
 non terminal NodoBase decl_stmt;
+non terminal NodoBase while_stmt;
+non terminal NodoBase for_stmt;
 /*+++++++++++++++++++++++*/
 
 /* Precedencia de operadores */
@@ -193,6 +199,15 @@ stmt        ::= if_stmt:sif	{: if(debug) System.out.println("\t regla 3a");
             | write_stmt:sesc	{: if(debug) System.out.println("\t regla 3e"); 
 					RESULT=sesc;
 					:}
+	    | while_stmt:swhi {:
+				System.out.println("\tnodo while...");
+				RESULT=swhi;
+		:}
+	    | for_stmt:sfor {:
+				System.out.println("\tnodo for...");
+				RESULT=sfor;
+				
+		:}
             | error	{: if(debug) System.out.println("\t regla 3g"); 
 				System.out.println("Ocurrio error en cup # 0004");
 				RESULT=null;
@@ -205,7 +220,15 @@ if_stmt     ::= IF exp:ex THEN stmt_seq:pthen END	{: if(debug) System.out.printl
 		RESULT = new NodoIf(ex,pthen,pelse);		
 		:}
 		;
-
+while_stmt ::= WHILE LPAREN exp:prueba RPAREN  stmt_seq:cuerpo ENDW {:
+				System.out.println("\treconociendo while....");
+				RESULT = new NodoWhile(prueba,cuerpo);
+		:};
+for_stmt ::= FOR LPAREN assign_stmt:asignacion COMA exp:prueba COMA assign_stmt:expresion RPAREN stmt_seq:cuerpo ENDF 
+		{:
+				System.out.println("\treconociendo for....");
+				RESULT = new NodoFor(asignacion,prueba,expresion,cuerpo);
+		:};
 repeat_stmt ::= REPEAT stmt_seq:cuerpo UNTIL exp:prueba	{: if(debug) System.out.println("\t regla 5a"); 
 							RESULT = new NodoRepeat(cuerpo,prueba);
 							:}

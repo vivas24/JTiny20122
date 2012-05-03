@@ -82,6 +82,18 @@ espacio		= [ \t]+
 "write"         {	if(debug) System.out.println("token WRITE");
 			return sf.newSymbol("WRITE",sym.WRITE);
 			}
+"while"        {	if(debug) System.out.println("token WHILE");
+			return sf.newSymbol("WHILE",sym.WHILE);
+			}
+"endwhile"        {	if(debug) System.out.println("token ENDW");
+			return sf.newSymbol("ENDW",sym.ENDW);
+			}
+"for" 	       {	if(debug) System.out.println("token FOR");
+			return sf.newSymbol("FOR",sym.FOR);
+			}
+"endfor"        {	if(debug) System.out.println("token ENDF");
+			return sf.newSymbol("ENDF",sym.ENDF);
+			}
 ":="            {	if(debug) System.out.println("token ASSIGN");
 			return sf.newSymbol("ASSIGN",sym.ASSIGN);
 			}

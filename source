@@ -1,8 +1,15 @@
 mainbegin
 	int x,y,z,vec[12],m,var;
 endvar
+	{int var;}
 	if x > 20 then
 		x:=100;
 	end;
+	while(x>0)
+		x:= x - 1;
+	endwhile;
+	for(z:=0,z<20,z:=z-1)
+		y:=z*z;
+	endfor;
 	write x;
 end
