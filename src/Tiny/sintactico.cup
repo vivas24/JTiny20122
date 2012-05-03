@@ -167,7 +167,7 @@ multi_func ::= multi_func:ini uni_func:func {:
 uni_func ::= FUNC ID:identificador BEGIN stmt_seq:cuerpo END SEMI{:
 		System.out.println("consegui funcion: "+identificador.toString());
 		RESULT = new NodoFuncion(identificador.toString(),cuerpo);
-		//ts.
+		ts.InsertarSimbolo(new NodoDeclaracion(0,identificador.toString()),-1);
 	:};
 main_blq ::= MAINB prog_blq:s END SEMI{: if(debug) System.out.println("\t regla 1a"); 
 					RESULT = s;

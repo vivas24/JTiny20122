@@ -68,7 +68,10 @@ public class Generador {
             } else if (nodo instanceof NodoRepeat) {
                 generarRepeat(nodo);
             } else if (nodo instanceof NodoAsignacion) {
-                generarAsignacion(nodo);
+                if(!((NodoAsignacion)nodo).esVector())
+                    generarAsignacion(nodo);
+                else
+                    generarVector(nodo);
             } else if (nodo instanceof NodoLeer) {
                 generarLeer(nodo);
             } else if (nodo instanceof NodoEscribir) {
@@ -158,6 +161,27 @@ public class Generador {
         /* Ahora almaceno el valor resultante */
         direccion = tablaSimbolos.getDireccion(n.getIdentificador());
         UtGen.emitirRM("ST", UtGen.AC, direccion, UtGen.GP, "asignacion: almaceno el valor para el id " + n.getIdentificador());
+        if (UtGen.debug) {
+            UtGen.emitirComentario("<- asignacion");
+        }
+    }
+    
+    private static void generarVector(NodoBase nodo) {
+        NodoAsignacion n = (NodoAsignacion) nodo;
+        int direccion;
+        if (UtGen.debug) {
+            UtGen.emitirComentario("-> asignacion");
+        }
+        /*-------------------------------------------------------------------------*/
+        direccion = tablaSimbolos.getDireccion(n.getIdentificador());
+        generar(n.getIndice());
+        UtGen.emitirRM("ST", UtGen.AC, UtGen.MP, UtGen.GP, "");
+        UtGen.emitirRM("LD", UtGen.AC1, UtGen.MP, UtGen.GP, "");
+        generar(n.getExpresion());
+        UtGen.emitirRM("ST", UtGen.AC, direccion, UtGen.AC1, "");
+        /*-------------------------------------------------------------------------*/
+//        UtGen.emitirRM("LD", UtGen.AC1, direccion, UtGen.AC1, "");
+//        UtGen.emitirRO("OUT", UtGen.AC1, 0, 0, "salida");
         if (UtGen.debug) {
             UtGen.emitirComentario("<- asignacion");
         }

@@ -1,23 +1,8 @@
 mainbegin
-	int x,y,z,vec[12],veco[10],m,var;
+	int x,vec[2];
 endvar
-	if x > 20 then
-		x:=100;
-	end;
-	while(x>0)
-		x:= x - 1;
-	endwhile;
-	for(z:=0,z<20,z:=z-1)
-		y:=z*z;
-		vec[z+2]:=0;
-		m:=vec[z+1];
-	endfor;
-	veco[x*x]:=vec[veco[z+2]];
-	miFuncion;
-	write x;
-end;
-function miFuncion
-begin
-	x:=100;
+	read x;
+	vec[0]:=x;
+	vec[1]:=x;
 end;
 
