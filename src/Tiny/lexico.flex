@@ -94,6 +94,12 @@ espacio		= [ \t]+
 "endfor"        {	if(debug) System.out.println("token ENDF");
 			return sf.newSymbol("ENDF",sym.ENDF);
 			}
+"function"        {	if(debug) System.out.println("token FUNC");
+			return sf.newSymbol("FUNC",sym.FUNC);
+			}
+"begin"        {	if(debug) System.out.println("token BEGIN");
+			return sf.newSymbol("BEGIN",sym.BEGIN);
+			}
 ":="            {	if(debug) System.out.println("token ASSIGN");
 			return sf.newSymbol("ASSIGN",sym.ASSIGN);
 			}

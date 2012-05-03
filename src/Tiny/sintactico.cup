@@ -90,6 +90,8 @@ terminal WHILE;		//ciclo while
 terminal ENDW;		//fin del ciclo while
 terminal FOR;		//ciclo for
 terminal ENDF;		//fin del ciclo for
+terminal FUNC;		//palabra clave para la declaracion de una funcion
+terminal BEGIN;		//inicio del cuerpo de la funcion
 /*+++++++++++++++++++++++*/
 
 /* Simbolos No Terminales */
@@ -112,6 +114,11 @@ non terminal NodoBase decl_seq;
 non terminal NodoBase decl_stmt;
 non terminal NodoBase while_stmt;
 non terminal NodoBase for_stmt;
+non terminal NodoBase main_blq;
+non terminal NodoBase full_prgm;
+non terminal NodoBase multi_func;
+non terminal NodoBase uni_func;
+non terminal NodoBase call_func;
 /*+++++++++++++++++++++++*/
 
 /* Precedencia de operadores */
@@ -124,8 +131,46 @@ precedence left AND;
 /*+++++++++++++++++++++++*/
 
 /* REGLAS GRAMATICALES */
-program     ::= MAINB prog_blq:s END{: if(debug) System.out.println("\t regla 1a"); 
-					ast = s;
+program ::= full_prgm:full {:
+			ast=full;
+			System.out.println("arbol generado....");
+		:};
+
+full_prgm ::= main_blq:main multi_func:funciones  {:
+		NodoBase hijoActual = main;
+		while(hijoActual.TieneHermano()){
+			hijoActual = hijoActual.getHermanoDerecha();
+		}
+		hijoActual.setHermanoDerecha(funciones);
+		RESULT=main;
+	:}
+	| main_blq:main{:
+		RESULT = main;
+	:}
+	;
+
+multi_func ::= multi_func:ini uni_func:func {:
+		NodoBase hijoActual = ini;
+		if(hijoActual !=null){
+			while(hijoActual.TieneHermano()){
+				hijoActual = hijoActual.getHermanoDerecha();
+			}
+			hijoActual.setHermanoDerecha(func);
+			RESULT=ini;
+		}else{
+			RESULT=func;
+		}
+	:}
+	| uni_func:func {:
+			RESULT=func;
+	:};
+uni_func ::= FUNC ID:identificador BEGIN stmt_seq:cuerpo END SEMI{:
+		System.out.println("consegui funcion: "+identificador.toString());
+		RESULT = new NodoFuncion(identificador.toString(),cuerpo);
+		//ts.
+	:};
+main_blq ::= MAINB prog_blq:s END SEMI{: if(debug) System.out.println("\t regla 1a"); 
+					RESULT = s;
 					:}
 		;
 prog_blq ::= INT decl_seq:ds SEMI ENDVAR stmt_seq:stm {:
@@ -208,6 +253,9 @@ stmt        ::= if_stmt:sif	{: if(debug) System.out.println("\t regla 3a");
 				RESULT=sfor;
 				
 		:}
+	    | call_func:cfst {:
+			RESULT=cfst;
+		:}
             | error	{: if(debug) System.out.println("\t regla 3g"); 
 				System.out.println("Ocurrio error en cup # 0004");
 				RESULT=null;
@@ -220,6 +268,10 @@ if_stmt     ::= IF exp:ex THEN stmt_seq:pthen END	{: if(debug) System.out.printl
 		RESULT = new NodoIf(ex,pthen,pelse);		
 		:}
 		;
+call_func ::= ID:funcion{:
+		RESULT = new NodoCallFuncion(funcion.toString());
+		System.out.println("\tllamada a la funcion: "+funcion.toString());
+	:};
 while_stmt ::= WHILE LPAREN exp:prueba RPAREN  stmt_seq:cuerpo ENDW {:
 				System.out.println("\treconociendo while....");
 				RESULT = new NodoWhile(prueba,cuerpo);

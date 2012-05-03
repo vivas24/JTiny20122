@@ -13,5 +13,11 @@ endvar
 		m:=vec[z+1];
 	endfor;
 	veco[x*x]:=vec[veco[z+2]];
+	miFuncion;
 	write x;
-end
+end;
+function miFuncion
+begin
+	x:=100;
+end;
+

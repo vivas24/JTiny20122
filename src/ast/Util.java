@@ -32,6 +32,10 @@ public class Util {
 		    	System.out.println("While");
                     else if(raiz instanceof NodoFor)
 		    	System.out.println("For");
+                    else if(raiz instanceof NodoFuncion)
+		    	System.out.println("Funcion");
+                    else if(raiz instanceof NodoCallFuncion)
+		    	System.out.println("Llamada a funcion: "+((NodoCallFuncion)raiz).getNombre());
 		    else System.out.println("Tipo de nodo desconocido");;
 		    
 		    /* Hago el recorrido recursivo */
@@ -100,6 +104,16 @@ public class Util {
 		    	imprimirAST(((NodoFor)raiz).getCuerpo());
 		    	printSpaces();
 		    	System.out.println("**FIN FOR**");
+                    }else if(raiz instanceof NodoFuncion){
+		    	printSpaces();
+		    	System.out.println("**Funcion**");
+                        printSpaces();
+                        System.out.println("NOMBRE: "+((NodoFuncion)raiz).getNombre());
+                        printSpaces();
+                        System.out.println("CUERPO: ");
+		    	imprimirAST(((NodoFuncion)raiz).getCuerpo());
+		    	printSpaces();
+		    	System.out.println("FIN FUNCION");
                     }
 		    raiz = raiz.getHermanoDerecha();
 		  }
