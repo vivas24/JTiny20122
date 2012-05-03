@@ -86,6 +86,8 @@ public class Generador {
                 System.out.println("********NODO DECLARACION => NO HACE NADA");
             } else if (nodo instanceof NodoWhile) {
                 generarWhile(nodo);
+            } else if (nodo instanceof NodoFor) {
+                generarFor(nodo);
             } else {
                 System.out.println("BUG: Tipo de nodo a generar desconocido");
             }
@@ -98,6 +100,39 @@ public class Generador {
         }
     }
     
+    private static void generarFor(NodoBase nodo){
+        NodoFor nf = (NodoFor)nodo;
+        int localidadInicio,localidadActual;
+        System.out.println("*****INICIO FOR*****");
+        
+        /*generar asignacion inicial*/
+        generar(nf.getAsigancion());
+        
+        /*lugar del salto al inicio*/
+        localidadInicio=UtGen.emitirSalto(0);
+        System.out.println("******POSICION INICIO: "+localidadInicio);
+
+        /*generar cuerpo del ciclo*/
+        System.out.println("****CUERPO DEL FOR****");
+        generar(nf.getCuerpo());
+        System.out.println("****FIN CUERPO DEL FOR****");
+        
+        /*generar la expresion que aumentara la variable*/
+        System.out.println("****EXPRESION DEL FOR****");
+        generar(nf.getExpresion());
+        System.out.println("****FIN EXPRESION FOR****");
+        
+        /*generar prueba*/
+        System.out.println("****PRUEBA DEL FOR*****");
+        generar(nf.getPrueba());
+        System.out.println("****FIN PRUEBA DEL FOR****");
+        
+        
+        /*saltar al inicio en caso de verdadero*/
+        UtGen.emitirRM_Abs("JNE", UtGen.AC, localidadInicio, "saltar al inicio del ciclo...");
+        
+        System.out.println("****FIN DEL CICLO FOR****");
+    }
     private static void generarWhile(NodoBase nodo){
         NodoWhile nw = (NodoWhile)nodo;
         int localidadSaltoFuera,localidadActual,localidadInicio;

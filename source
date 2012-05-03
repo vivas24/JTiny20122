@@ -1,10 +1,10 @@
 mainbegin
-	int x;
+	int x,i;
 endvar
 	read x;
-	while(x>0)
-		x:=x-1;
+	for(i:=0,i<10&&x>=0,i:=i+1)
+		x:=x-1;		
 		write x;
-	endwhile;
+	endfor;
 end;
 
