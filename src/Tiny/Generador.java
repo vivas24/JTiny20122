@@ -80,7 +80,10 @@ public class Generador {
             } else if (nodo instanceof NodoValor) {
                 generarValor(nodo);
             } else if (nodo instanceof NodoIdentificador) {
-                generarIdentificador(nodo);
+                if(((NodoIdentificador)nodo).esVector())
+                    generarIdentificadorVector(nodo);
+                else
+                    generarIdentificador(nodo);
             } else if (nodo instanceof NodoOperacion) {
                 generarOperacion(nodo);
             } else if (nodo instanceof NodoDeclaracion) {
@@ -112,7 +115,11 @@ public class Generador {
         System.out.println("****LLAMADA A: "+nc.getNombre());
         linea = tablaSimbolos.BuscarSimbolo(nc.getNombre()).getNumLinea();
         if(linea!=-1) {
+            localidadActual = UtGen.emitirSalto(0);
             UtGen.emitirRM_Abs("LDA", UtGen.PC, linea, "ejecutar funcion");
+            UtGen.cargarRespaldo(tablaSimbolos.BuscarSimbolo(nc.getNombre()).getFinal());
+            UtGen.emitirRM_Abs("LDA", UtGen.PC, localidadActual, "retornar a la llamada de la funcion");
+            UtGen.restaurarRespaldo();
             return;
         }
         //lineaLlamadaFuncion = UtGen.emitirSalto(0)+1;
@@ -153,6 +160,8 @@ public class Generador {
         generar(nf.getCuerpo());
         localidadActual=UtGen.emitirSalto(0);
         System.out.println("******FIN DE LA FUNCION******");
+        System.out.println("******LINEA FINAL DE LA FUNCION: "+localidadActual);
+        tablaSimbolos.BuscarSimbolo(nf.getNombre()).setFinal(localidadActual);
         UtGen.cargarRespaldo(localidadSaltoSkip);
         UtGen.emitirRM_Abs("LDA", UtGen.PC, localidadActual+1, "skip funcion...");
         UtGen.restaurarRespaldo();
@@ -372,6 +381,15 @@ public class Generador {
         }
     }
 
+    private static void generarIdentificadorVector(NodoBase nodo){
+        NodoIdentificador ni = (NodoIdentificador)nodo;
+        int direccion;
+        generar(ni.getIndice());
+        direccion = tablaSimbolos.getDireccion(ni.getNombre());
+        generar(ni.getIndice());
+        UtGen.emitirRM("LD", UtGen.AC, direccion,UtGen.AC, "cargar el contenido de la direccion dada en el vector");
+    }
+    
     private static void generarOperacion(NodoBase nodo) {
         NodoOperacion n = (NodoOperacion) nodo;
         if (UtGen.debug) {

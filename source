@@ -1,14 +1,12 @@
 mainbegin
-	int i;
+	int x,y,z,vec[5];
 endvar
-	miFuncion;	
-	for(i:=0,i<5,i:=i+1)
-		write i;
-	endfor;
-	miFuncion;
+	vec[3]:=100;
+	write vec[3];
 end;
-function miFuncion
+{function miFuncion
 begin
 	i:=10;
 	write i;
 end;
+}

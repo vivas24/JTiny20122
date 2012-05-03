@@ -3,6 +3,7 @@ package ast;
 public class NodoFuncion extends NodoBase{
     private String nombre;
     private NodoBase cuerpo;
+    private int lineaFinal;
     public NodoFuncion(String nombre,NodoBase cuerpo){
         this.cuerpo=cuerpo;
         this.nombre=nombre;
