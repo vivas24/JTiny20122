@@ -246,6 +246,15 @@ assign_stmt ::= ID:variable 	{: if(debug) System.out.println("\t regla 6 parte d
 					System.out.println("Ocurrio error en cup # 0001");
 					}
 					:}
+		| ID:vector LCOR simple_exp:indice RCOR ASSIGN exp:ex {:
+					if(debug) System.out.println("\t asigacion a un vector...");
+					if(vector!=null)
+						RESULT = new NodoAsignacion(vector.toString(),indice,ex);
+					else{
+						RESULT = null;
+						System.out.println("Ocurrio error en asignacion a vector...");
+					}		
+					:}
 		;
 
 read_stmt   ::= READ ID:variable	{: if(debug) System.out.println("\t regla 7a"); 

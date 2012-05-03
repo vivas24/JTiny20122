@@ -56,9 +56,14 @@ public class Util {
 		    	System.out.println("**Prueba REPEAT**");
 		    	imprimirAST(((NodoRepeat)raiz).getPrueba());
 		    }
-		    else if (raiz instanceof  NodoAsignacion)
-		    	imprimirAST(((NodoAsignacion)raiz).getExpresion());
-		    else if (raiz instanceof  NodoEscribir)
+		    else if (raiz instanceof  NodoAsignacion){
+                         NodoAsignacion nodo = (NodoAsignacion)raiz;
+                         if(nodo.esVector()){
+                             
+                         }
+                        imprimirAST(nodo.getExpresion());
+                        
+                    }else if (raiz instanceof  NodoEscribir)
 		    	imprimirAST(((NodoEscribir)raiz).getExpresion());
 		    else if (raiz instanceof NodoOperacion){
 		    	printSpaces();

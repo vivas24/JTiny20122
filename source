@@ -1,7 +1,6 @@
 mainbegin
 	int x,y,z,vec[12],m,var;
 endvar
-	{int var;}
 	if x > 20 then
 		x:=100;
 	end;
@@ -10,6 +9,7 @@ endvar
 	endwhile;
 	for(z:=0,z<20,z:=z-1)
 		y:=z*z;
+		vec[z]:=0;
 	endfor;
 	write x;
 end
