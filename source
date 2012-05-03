@@ -1,8 +1,10 @@
 mainbegin
-	int x,vec[2];
+	int x;
 endvar
 	read x;
-	vec[0]:=x;
-	vec[1]:=x;
+	while(x>0)
+		x:=x-1;
+		write x;
+	endwhile;
 end;
 

@@ -84,6 +84,8 @@ public class Generador {
                 generarOperacion(nodo);
             } else if (nodo instanceof NodoDeclaracion) {
                 System.out.println("********NODO DECLARACION => NO HACE NADA");
+            } else if (nodo instanceof NodoWhile) {
+                generarWhile(nodo);
             } else {
                 System.out.println("BUG: Tipo de nodo a generar desconocido");
             }
@@ -95,7 +97,45 @@ public class Generador {
             System.out.println("���ERROR: por favor fije la tabla de simbolos a usar antes de generar codigo objeto!!!");
         }
     }
+    
+    private static void generarWhile(NodoBase nodo){
+        NodoWhile nw = (NodoWhile)nodo;
+        int localidadSaltoFuera,localidadActual,localidadInicio;
+        System.out.println("******INICIO WHILE*****");
+        
+        
+        /*linea donde comienza el while*/
+        localidadInicio=UtGen.emitirSalto(0);
+        System.out.println("******POSICION INICIO: "+localidadInicio);
 
+        /*generar prueba*/
+        generar(nw.getPrueba());
+
+        /*generar lugar numero de linea donde se encuentra la condicion del salto en caso de falso*/
+        localidadSaltoFuera = UtGen.emitirSalto(1);
+
+        /*generar cuerpo del while*/
+        System.out.println("******POSICION LINEA SALTO FUERA: "+localidadSaltoFuera);
+        generar(nw.getCuerpo());
+
+
+        /*aqui va el salto incondicional al inicio del ciclo*/
+        UtGen.emitirRM_Abs("LDA", UtGen.PC, localidadInicio, "salto incondicional al inicio del while");
+
+        
+        /*hasta esta linea es donde se tiene que saltar en caso de falso*/
+        localidadActual=UtGen.emitirSalto(0);
+        System.out.println("******LOCALIDAD ACTUAL: "+localidadActual);
+        
+        /*aqui genero el salto hacia fuera del ciclo en caso de falso*/
+        UtGen.cargarRespaldo(localidadSaltoFuera);
+        UtGen.emitirRM_Abs("JEQ", UtGen.AC, localidadActual+1, "saltar fuera del ciclo...");
+        /*restauro el numero de linea todo al estado anterior*/
+        UtGen.restaurarRespaldo();
+        
+        System.out.println("*****FIN WHILE*****");
+    }
+    
     private static void generarIf(NodoBase nodo) {
         NodoIf n = (NodoIf) nodo;
         int localidadSaltoElse, localidadSaltoEnd, localidadActual;
@@ -194,7 +234,6 @@ public class Generador {
             UtGen.emitirComentario("-> leer");
         }
         UtGen.emitirRO("IN", UtGen.AC, 0, 0, "leer: lee un valor entero ");
-        System.out.println("GET DIRECCION DE: "+n.getIdentificador());
         direccion = tablaSimbolos.getDireccion(n.getIdentificador());
         UtGen.emitirRM("ST", UtGen.AC, direccion, UtGen.GP, "leer: almaceno el valor entero leido en el id " + n.getIdentificador());
         if (UtGen.debug) {
