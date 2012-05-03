@@ -71,7 +71,7 @@ public class Generador {
                 if(!((NodoAsignacion)nodo).esVector())
                     generarAsignacion(nodo);
                 else
-                    generarVector(nodo);
+                    generarAsignacionVector(nodo);
             } else if (nodo instanceof NodoLeer) {
                 generarLeer(nodo);
             } else if (nodo instanceof NodoEscribir) {
@@ -241,7 +241,7 @@ public class Generador {
         }
     }
     
-    private static void generarVector(NodoBase nodo) {
+    private static void generarAsignacionVector(NodoBase nodo) {
         NodoAsignacion n = (NodoAsignacion) nodo;
         int direccion;
         if (UtGen.debug) {

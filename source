@@ -1,10 +1,11 @@
 mainbegin
-	int x,i;
+	int vec[5],x,i;
 endvar
 	read x;
-	for(i:=0,i<10&&x>=0,i:=i+1)
+	for(i:=0,i<5,i:=i+1)
 		x:=x-1;		
 		write x;
+		vec[i]:=x;
 	endfor;
 end;
 
