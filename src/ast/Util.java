@@ -16,7 +16,7 @@ public class Util {
 		    
 		    else if (raiz instanceof  NodoAsignacion)
 		    	System.out.println("Asignacion a: "+((NodoAsignacion)raiz).getIdentificador());
-
+                        
 		    else if (raiz instanceof  NodoLeer)  
 		    	System.out.println("Lectura: "+((NodoLeer)raiz).getIdentificador());
 
@@ -59,8 +59,12 @@ public class Util {
 		    else if (raiz instanceof  NodoAsignacion){
                          NodoAsignacion nodo = (NodoAsignacion)raiz;
                          if(nodo.esVector()){
-                             
+                             printSpaces();
+                             System.out.println("**Calculo de la posicion**");
+                             imprimirAST(nodo.getIndice());
                          }
+                         printSpaces();
+                        System.out.println("**Expresion Asignada**"); 
                         imprimirAST(nodo.getExpresion());
                         
                     }else if (raiz instanceof  NodoEscribir)
@@ -154,7 +158,15 @@ static void imprimirNodo( NodoBase raiz )
 	}
 
 	if(	raiz instanceof NodoIdentificador ){
-		System.out.println("ID, nombre= "+ ((NodoIdentificador)raiz).getNombre());
+                NodoIdentificador nodo =  (NodoIdentificador)raiz;
+		System.out.println("ID: "+ nodo.getNombre());
+                if(nodo.esVector()){
+                    printSpaces();
+                    System.out.println("VECTOR");
+                    printSpaces();
+                    System.out.println("Calcular indice:");
+                    imprimirAST(nodo.getIndice());
+                }
 	}
 	if(	raiz instanceof NodoDeclaracion ){
                 NodoDeclaracion nodo = (NodoDeclaracion)raiz;

@@ -344,6 +344,16 @@ factor      ::= LPAREN exp:ex RPAREN	{: if(debug) System.out.println("\t regla 1
 						System.out.println("Ocurrio error en cup # 0005");
 					}
 					:}
+		| ID:vector LCOR simple_exp:indice RCOR	{: if(debug) System.out.println("\t vector como expresion..."); 
+					if(vector!=null){
+						System.out.println("Generar nodo para vector como expresion:"+ vector.toString());
+						RESULT= new NodoIdentificador(vector.toString(),indice);		
+					}else{
+						RESULT = null;
+						System.out.println("Ocurrio error en vector como expresion...");
+					}
+					:}
+
 		| error	{: if(debug) System.out.println("\t regla 12d"); 
 				System.out.println("Ocurrio error en cup # 0003");
 				RESULT=null;

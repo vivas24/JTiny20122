@@ -1,5 +1,5 @@
 mainbegin
-	int x,y,z,vec[12],m,var;
+	int x,y,z,vec[12],veco[10],m,var;
 endvar
 	if x > 20 then
 		x:=100;
@@ -9,7 +9,9 @@ endvar
 	endwhile;
 	for(z:=0,z<20,z:=z-1)
 		y:=z*z;
-		vec[z]:=0;
+		vec[z+2]:=0;
+		m:=vec[z+1];
 	endfor;
+	veco[x*x]:=vec[veco[z+2]];
 	write x;
 end
