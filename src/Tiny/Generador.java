@@ -194,7 +194,7 @@ public class Generador {
         generar(nf.getPrueba());
         System.out.println("****FIN PRUEBA DEL FOR****");
         
-        
+        //UtGen.emitirRO("OUT", UtGen.AC, 0, 0, "PRUEBA DEL FOR");
         /*saltar al inicio en caso de verdadero*/
         UtGen.emitirRM_Abs("JNE", UtGen.AC, localidadInicio, "saltar al inicio del ciclo...");
         
@@ -321,7 +321,7 @@ public class Generador {
         UtGen.emitirRM("LD", UtGen.AC1, UtGen.MP, UtGen.GP, "");
         generar(n.getExpresion());
         UtGen.emitirRM("ST", UtGen.AC, direccion, UtGen.AC1, "");
-        /*-------------------------------------------------------------------------*/
+          /*-------------------------------------------------------------------------*/
 //        UtGen.emitirRM("LD", UtGen.AC1, direccion, UtGen.AC1, "");
 //        UtGen.emitirRO("OUT", UtGen.AC1, 0, 0, "salida");
         if (UtGen.debug) {
@@ -387,6 +387,7 @@ public class Generador {
         generar(ni.getIndice());
         direccion = tablaSimbolos.getDireccion(ni.getNombre());
         generar(ni.getIndice());
+        UtGen.emitirRO("OUT", UtGen.AC, 0, 0, "posicion del vector...");
         UtGen.emitirRM("LD", UtGen.AC, direccion,UtGen.AC, "cargar el contenido de la direccion dada en el vector");
     }
     

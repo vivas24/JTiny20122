@@ -1,12 +1,26 @@
 mainbegin
-	int x,y,z,vec[5];
+	int vec[10],i;
 endvar
-	vec[3]:=100;
-	write vec[3];
+{
+	for(i:=0,i<10,i:=i+1)
+		vec[i]:=100;
+		write vec[i];
+	endfor;
+
+	i:=0;
+	while(i<10)
+		write i;		
+		write vec[i];
+		i:=i+1;
+	endwhile;
+}
+	i:=10;
+	if i<3 then
+		write i;
+	end;
+	{miFuncion;}
 end;
-{function miFuncion
+function miFuncion
 begin
 	i:=10;
-	write i;
 end;
-}

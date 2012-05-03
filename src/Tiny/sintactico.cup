@@ -26,13 +26,22 @@ Mas informacion en: http//4thmouse.com/index.php/2007/02/15/using-custom-symbols
 		System.out.println("IMPRESION DEL AST GENERADO");
 		System.out.println();
 		ast.Util.imprimirAST(root);
+
+
+		AnalizadorSemantico objAS = new AnalizadorSemantico(root);
+		if(!objAS.AnalizarIf()){
+			System.out.println("expresion de IF no valida...");
+			return;
+		}
+		if(!objAS.AnalizarFunciones()){
+			System.out.println("ERROR: llamada a una funcion no declarada...");
+			return;
+		}
 		TablaSimbolos ts = parser_obj.action_obj.getTablaSimbolos();
 		ts.ImprimirClaves();
-
 		Tiny.Generador.setTablaSimbolos(ts);
 		Tiny.Generador.raizTmp = root;
 		Tiny.Generador.generarCodigoObjeto(root);
-
 	}
 
 :};
