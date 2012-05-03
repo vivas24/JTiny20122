@@ -1,11 +1,14 @@
 mainbegin
-	int vec[5],x,i;
+	int i;
 endvar
-	read x;
+	miFuncion;	
 	for(i:=0,i<5,i:=i+1)
-		x:=x-1;		
-		write x;
-		vec[i]:=x;
+		write i;
 	endfor;
+	miFuncion;
 end;
-
+function miFuncion
+begin
+	i:=10;
+	write i;
+end;

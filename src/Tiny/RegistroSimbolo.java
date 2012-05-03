@@ -21,6 +21,9 @@ public class RegistroSimbolo {
 		return NumLinea;
 	}
 
+        public void setNumLinea(int linea){
+            this.NumLinea=linea;
+        }
 	public int getDireccionMemoria() {
 		return DireccionMemoria;
 	}

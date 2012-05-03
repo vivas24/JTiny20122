@@ -37,6 +37,7 @@ public class Generador {
      */
     private static int desplazamientoTmp = 0;
     private static TablaSimbolos tablaSimbolos = null;
+    public static NodoBase raizTmp = null;
 
     public static void setTablaSimbolos(TablaSimbolos tabla) {
         tablaSimbolos = tabla;
@@ -88,6 +89,10 @@ public class Generador {
                 generarWhile(nodo);
             } else if (nodo instanceof NodoFor) {
                 generarFor(nodo);
+            } else if (nodo instanceof NodoFuncion) {
+                //generarFuncion(nodo);
+            } else if (nodo instanceof NodoCallFuncion) {
+                generarCallFuncion(nodo);
             } else {
                 System.out.println("BUG: Tipo de nodo a generar desconocido");
             }
@@ -100,6 +105,59 @@ public class Generador {
         }
     }
     
+    private static void generarCallFuncion(NodoBase nodo){
+        NodoCallFuncion nc = (NodoCallFuncion)nodo;
+        int linea,localidadActual;
+        NodoBase aux = raizTmp;
+        System.out.println("****LLAMADA A: "+nc.getNombre());
+        linea = tablaSimbolos.BuscarSimbolo(nc.getNombre()).getNumLinea();
+        if(linea!=-1) {
+            UtGen.emitirRM_Abs("LDA", UtGen.PC, linea, "ejecutar funcion");
+            return;
+        }
+        //lineaLlamadaFuncion = UtGen.emitirSalto(0)+1;
+        //System.out.println("****LLAMAR A FUNCION EN: "+lineaLlamadaFuncion);
+        localidadActual = UtGen.emitirSalto(0);
+        UtGen.emitirRM_Abs("LDA", UtGen.PC, localidadActual+2, "ejecutar funcion");
+        while(aux!=null){
+            if(aux instanceof NodoFuncion){
+                if(((NodoFuncion)aux).getNombre().equals(nc.getNombre())){
+                    System.out.println("*****generar funcion: "+nc.getNombre());
+                    generarFuncion(aux);
+                }
+            }
+            aux = aux.getHermanoDerecha();
+                    
+        }
+        linea = tablaSimbolos.BuscarSimbolo(nc.getNombre()).getNumLinea();
+        
+    }
+    
+    private static void generarFuncion(NodoBase nodo){
+        NodoFuncion nf = (NodoFuncion)nodo;
+        int localidadActual;
+        int localidadSaltoSkip=UtGen.emitirSalto(1);
+        System.out.println("******LOCALIDAD SALTO SKIP: "+localidadSaltoSkip);
+        int localidadInicioFuncion=UtGen.emitirSalto(0),direccion;
+        System.out.println("******FUNCION******");
+        System.out.println("******POSICION INICIAL DE LA FUNCION: "+localidadInicioFuncion);
+        tablaSimbolos.BuscarSimbolo(nf.getNombre()).setNumLinea(localidadInicioFuncion);
+/*        System.out.println("******CARGAR EN MEMORIA LA POSICION DE LA LINEA INICIAL DE LA FUNCION");
+        UtGen.emitirRM("LDC", UtGen.AC, localidadInicioFuncion, 0, "cargar en el registro AC el numero de linea de "+nf.getNombre());
+        direccion = tablaSimbolos.getDireccion(nf.getNombre());
+        UtGen.emitirRM("ST", UtGen.AC, direccion, UtGen.GP, "guardo en memoria el numero de linea de: "+nf.getNombre());
+        UtGen.emitirRM("LD", UtGen.AC, direccion, UtGen.GP, "cargar desde memoria el numero de linea de : " + nf.getNombre());
+        UtGen.emitirRO("OUT", UtGen.AC, 0, 0, "linea donde esta la funcion");
+         *
+*/
+        generar(nf.getCuerpo());
+        localidadActual=UtGen.emitirSalto(0);
+        System.out.println("******FIN DE LA FUNCION******");
+        UtGen.cargarRespaldo(localidadSaltoSkip);
+        UtGen.emitirRM_Abs("LDA", UtGen.PC, localidadActual+1, "skip funcion...");
+        UtGen.restaurarRespaldo();
+    }
+            
     private static void generarFor(NodoBase nodo){
         NodoFor nf = (NodoFor)nodo;
         int localidadInicio,localidadActual;
